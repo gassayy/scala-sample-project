@@ -1,0 +1,7 @@
+.DS_Store
+.bloop
+.ensime
+.idea
+target/
+*/target
+*~
