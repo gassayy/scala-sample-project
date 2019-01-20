@@ -1,14 +1,32 @@
 package com.gassayan
 
-import org.specs2.mock.Mockito
-import org.specs2.mutable.Specification
+import org.scalatest._
+import collection.mutable.ListBuffer
 
-class CommonSpec extends Specification with Mockito {
+class CommonSpec extends FlatSpec with BeforeAndAfter {
 
-  "Common" should {
+  val builder = new StringBuilder
+  val buffer = new ListBuffer[String]
 
-    "measure units" in {
-      1 mustEqual 1
-    }
+  before {
+    builder.append("ScalaTest is ")
+  }
+
+  after {
+    builder.clear()
+    buffer.clear()
+  }
+
+  "Testing" should "be easy" in {
+    builder.append("easy!")
+    assert(builder.toString === "ScalaTest is easy!")
+    assert(buffer.isEmpty)
+    buffer += "sweet"
+  }
+
+  it should "be fun" in {
+    builder.append("fun!")
+    assert(builder.toString === "ScalaTest is fun!")
+    assert(buffer.isEmpty)
   }
 }

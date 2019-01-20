@@ -9,5 +9,7 @@ object First {
 
   val logger = Logger(getClass)
 
-  def main(args: Array[String]): Unit = logger.info(s"Run first at version: ${config.version}")
+  def main(args: Array[String]): Unit = {
+    val _ = logger.info(s"Run first at version: ${config.version}")
+  }
 }

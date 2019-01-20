@@ -2,6 +2,8 @@
 .bloop
 .ensime
 .idea
+*_cache/
+*.log
 target/
 */target
 *~

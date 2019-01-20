@@ -1,14 +1,24 @@
 package com.gassayan
 
-import org.specs2.mock.Mockito
-import org.specs2.mutable.Specification
+import org.scalatest.tagobjects.Slow
+import org.scalatest.{FunSpec, Matchers, Tag}
 
-class CommonFunSpec extends Specification with Mockito {
 
-  "Common integration" should {
+object DynamoDBTest extends Tag("com.company.tags.DynamoDBTest")
 
-    "function in Church" in {
-      1 mustEqual 1
+
+class CommonFunSpec extends FunSpec with Matchers {
+
+  describe("DynamoDB") {
+    describe("when empty") {
+      it("should have zerio record") {
+        assert( 1 === 1 )
+      }
+
+      it("should produce NoSuchElementException when a query is executed", Slow, DynamoDBTest) {
+        assert(true === true)
+      }
     }
   }
+
 }
