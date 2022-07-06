@@ -8,7 +8,7 @@ object Dependencies {
   val scalaOrganization = "org.scala-lang"
 
   val jdkV         = "1.8"
-  val scalaVersion = "2.12.8"
+  val scalaVersion = "2.12.16"
   val scalaV       = "2.12.6"
   val awsV         = "1.11.372"
   val akkaV        = "2.5.19"

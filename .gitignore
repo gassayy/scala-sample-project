@@ -7,3 +7,7 @@
 target/
 */target
 *~
+.metals
+.vscode
+project/metals.sbt
+project/project
