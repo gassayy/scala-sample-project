@@ -130,35 +130,7 @@ object Settings extends Dependencies {
     )
   )
 
-//  private val jarPublishSettings = Seq(
-//    homepage := Some(url("https://project_paga.com")),
-//    // TODO configure licenses???
-//    //licenses := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-//    // TODO: configure scm info
-////    scmInfo := Some(
-////      ScmInfo(url("https://github.com/org/project"), "scm:git:git@github.com:org/project.git")
-////    ),
-//    // TODO change this with real configuration
-//    publishTo := {
-//      val repoBase = "https://oss.sonatype.org/"
-//      if (isSnapshot.value)
-//        Some("snapshots" at repoBase + "content/repositories/snapshots")
-//      else
-//        Some("releases" at repoBase + "service/local/staging/deploy/maven2")
-//    },
-//    publishMavenStyle := true,
-//    publishArtifact in Test := false,
-//    pomIncludeRepository := { _ => false }
-//  )
-//
-//  private val dockerPublishSettings = Seq(
-//
-//  )
-//
-//  private val noPublishSettings =
-//    Seq(skip in publish := true, publishArtifact := false)
-
-  /* Project Strucutre */
+  /* Project Structure */
   implicit class ProjectRoot(project: Project) {
 
     def root: Project = project in file(".")
@@ -204,7 +176,7 @@ object Settings extends Dependencies {
       project dependsOn (projects.map(generateDepsForProject): _*)
   }
 
-  /* Projecgt Publish Configration */
+  /* Project Publish Configuration */
 //  implicit class PublishRootConfigurator(project: Project) {
 //
 //    def publishJar: Project = project.settings(jarPublishSettings)
@@ -237,9 +209,6 @@ object Settings extends Dependencies {
           mainClass := Some(main)
         )))
         .settings(Compile / run / mainClass := Some(main))
-        // .settings(aspectjSettings)
-        // .settings(Aspectj / aspectjVersion := aspectjVersionUsed)
-        // .settings(reStart / javaOptions ++= (Aspectj / aspectjWeaverOptions).value)
     }
 
   abstract class TestConfigurator(project: Project, config: Configuration) {

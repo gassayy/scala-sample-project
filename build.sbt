@@ -15,15 +15,9 @@ val jarPublishSettings = Seq(
 val repo_user   = sys.env.get("ARTIFACTORY_USER")
 val repo_passwd = sys.env.get("ARTIFACTORY_PASSWD")
 
-//credentials += (repo_user, repo_passwd) match {
-//  case (Some(user), Some(passwd)) => { Seq(Credentials("Artifactory Realm", "URI", user, passwd)) }
-//  case (_, _)         => { println("missing credential..."); Seq() }
-//}
-
-
 lazy val root = project.root
-  .setName("scala-hello-world")
-  .setDescription("hello world built upon MateuszKubuszok/SBTScalaMultiproject2.g8")
+  .setName("root")
+  .setDescription("the root of multi-projects")
   .configureRoot
   .settings(noPublishSettings)
   .aggregate(common, subproject1)
