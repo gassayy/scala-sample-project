@@ -1,11 +1,12 @@
 package com.gassayan.second
 
 import com.typesafe.scalalogging.Logger
-import pureconfig.loadConfig
+import pureconfig._
+import pureconfig.generic.auto._
 
-object Second {
+object Main {
 
-  val config = loadConfig[SecondConfig]("second").getOrElse(SecondConfig("undefined"))
+  val config = ConfigSource.default.loadOrThrow[SecondConfig]
 
   val logger = Logger(getClass)
 

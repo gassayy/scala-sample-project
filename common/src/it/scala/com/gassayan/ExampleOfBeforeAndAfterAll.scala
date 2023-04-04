@@ -1,9 +1,9 @@
 package com.gassayan
 
-import org.scalatest.{BeforeAndAfterAll, FlatSpec}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.BeforeAndAfterAll
 
-
-class ExampleOfBeforeAndAfterAll extends FlatSpec with BeforeAndAfterAll {
+class ExampleOfBeforeAndAfterAll extends AnyFlatSpec with BeforeAndAfterAll {
 
   override def beforeAll(): Unit = {
     println("in beforeAll")

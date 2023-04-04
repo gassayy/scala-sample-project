@@ -2,9 +2,6 @@ import sbt.Keys._
 import sbt.TestFrameworks.ScalaTest
 import sbt.Tests.Argument
 import sbt._
-// import com.lightbend.sbt.SbtAspectj._
-// import com.lightbend.sbt.SbtAspectj.autoImport._
-import com.lucidchart.sbt.scalafmt.ScalafmtCorePlugin.autoImport._
 import com.typesafe.sbt._
 import org.scalastyle.sbt.ScalastylePlugin.autoImport._
 import sbtassembly.AssemblyPlugin.autoImport._
@@ -16,21 +13,17 @@ object Settings extends Dependencies {
   val FunctionalTest: Configuration = config("fun") extend Test describedAs "Runs only functional tests"
 
   private val commonSettings = Seq(
-    organization      := "com.gassayan",
-
+    organization := "com.gassayan",
     scalaOrganization := scalaOrganizationUsed,
-    scalaVersion      := scalaVersionUsed,
-
-    scalafmtVersion   := scalaFmtVersionUsed
+    scalaVersion := scalaVersionUsed
   )
 
   private val rootSettings = commonSettings
 
   private val modulesSettings = commonSettings ++ Seq(
     scalacOptions ++= Seq(
-      // standard settings
-      "-target:jvm-1.8",
-      "-encoding", "UTF-8",
+      "-encoding",
+      "UTF-8",
       "-unchecked",
       "-deprecation",
       "-explaintypes",
@@ -40,18 +33,10 @@ object Settings extends Dependencies {
       "-language:higherKinds",
       "-language:implicitConversions",
       "-language:postfixOps",
-      // private options
-      //"-Ybackend-parallelism", "8", required scala >= 2.12.5
-      "-Yno-adapted-args",
-      "-Ypartial-unification",
       // warnings
       "-Ywarn-dead-code",
       "-Ywarn-extra-implicit",
-      "-Ywarn-inaccessible",
-      "-Ywarn-infer-any",
       "-Ywarn-macros:after",
-      "-Ywarn-nullary-override",
-      "-Ywarn-nullary-unit",
       "-Ywarn-numeric-widen",
       "-Ywarn-unused:implicits",
       "-Ywarn-unused:imports",
@@ -63,18 +48,14 @@ object Settings extends Dependencies {
       // advanced options
       "-Xcheckinit",
       "-Xfatal-warnings",
-      "-Xfuture",
       // linting
       "-Xlint",
       "-Xlint:adapted-args",
-      "-Xlint:by-name-right-associative",
       "-Xlint:constant",
       "-Xlint:delayedinit-select",
       "-Xlint:doc-detached",
-      "-Xlint:inaccessible",
       "-Xlint:infer-any",
       "-Xlint:missing-interpolator",
-      "-Xlint:nullary-override",
       "-Xlint:nullary-unit",
       "-Xlint:option-implicit",
       "-Xlint:package-object-classes",
@@ -82,52 +63,17 @@ object Settings extends Dependencies {
       "-Xlint:private-shadow",
       "-Xlint:stars-align",
       "-Xlint:type-parameter-shadow",
-      "-Xlint:unsound-match"
+      // https://github.com/pureconfig/pureconfig/issues/1258
+      "-Wconf:site=com.gassayan.first.*&cat=lint-byname-implicit:silent",
+      "-Wconf:site=com.gassayan.second.*&cat=lint-byname-implicit:silent"
     ),
-    console / scalacOptions := Seq(
-      // standard settings
-      "-target:jvm-1.8",
-      "-encoding", "UTF-8",
-      "-unchecked",
-      "-deprecation",
-      "-explaintypes",
-      "-feature",
-      // language features
-      "-language:existentials",
-      "-language:higherKinds",
-      "-language:implicitConversions",
-      "-language:postfixOps",
-      // private options
-      "-Yno-adapted-args",
-      "-Ypartial-unification"
-    ),
-
     Global / cancelable := true,
-
     Compile / fork := true,
-    Compile / trapExit := false,
     Compile / connectInput := true,
     Compile / outputStrategy := Some(StdoutOutput),
-
     resolvers ++= commonResolvers,
-
     libraryDependencies ++= mainDeps,
-
-    Compile / scalafmtOnCompile := true,
-
-    scalastyleFailOnError := true,
-
-    Compile / compile / wartremoverWarnings ++= Warts.allBut(
-      Wart.Any,
-      Wart.DefaultArguments,
-      Wart.ExplicitImplicitTypes,
-      Wart.ImplicitConversion,
-      Wart.ImplicitParameter,
-      Wart.Overloading,
-      Wart.PublicInference,
-      Wart.NonUnitStatements,
-      Wart.Nothing
-    )
+    scalastyleFailOnError := true
   )
 
   /* Project Structure */
@@ -176,40 +122,23 @@ object Settings extends Dependencies {
       project dependsOn (projects.map(generateDepsForProject): _*)
   }
 
-  /* Project Publish Configuration */
-//  implicit class PublishRootConfigurator(project: Project) {
-//
-//    def publishJar: Project = project.settings(jarPublishSettings)
-//
-//    def publishDocker: Project = project.setttings(dockerPublishSettings)
-//
-//    def noPublish: Project = project.settings(noPublishSettings)
-//  }
-
-//  implicit class PublishConfigurator(project: Project) {
-//
-//    def publishJar: Project = project
-//      .settings(jarPublishSettings)
-//
-//    def publishDockerImage: Project = project.settings(dockerPublishSettings)
-//
-//    def publishNothing: Project = project
-//      .settings(noPublishSettings)
-//  }
-
   /* Project Execution and Test Configuration */
   implicit class RunConfigurator(project: Project) {
 
-      def configureRun(main: String): Project = project
-        .settings(inTask(assembly)(Seq(
-          assemblyJarName := s"${name.value}.jar",
-          assemblyMergeStrategy := {
-            case strategy => MergeStrategy.defaultMergeStrategy(strategy)
-          },
-          mainClass := Some(main)
-        )))
-        .settings(Compile / run / mainClass := Some(main))
-    }
+    def configureRun(main: String): Project = project
+      .settings(
+        inTask(assembly)(
+          Seq(
+            assemblyJarName := s"${name.value}.jar",
+            assemblyMergeStrategy := { case strategy =>
+              MergeStrategy.defaultMergeStrategy(strategy)
+            },
+            mainClass := Some(main)
+          )
+        )
+      )
+      .settings(Compile / run / mainClass := Some(main))
+  }
 
   abstract class TestConfigurator(project: Project, config: Configuration) {
 
@@ -217,32 +146,35 @@ object Settings extends Dependencies {
       .configs(config)
       .settings(inConfig(config)(Defaults.testSettings): _*)
       .settings(inConfig(config)(libraryDependencies ++= testDeps))
-      .settings(inConfig(config)(scalafmtSettings))
-      .settings(inConfig(config)(Seq(
-        scalafmtOnCompile := true,
-        scalastyleConfig := baseDirectory.value / "scalastyle-test-config.xml",
-        scalastyleFailOnError := false,
-        fork := requiresFork,
-        testFrameworks := Seq(ScalaTest),
-        testOptions += Argument(ScalaTest, "-oWDT"),
-        parallelExecution := requiresFork
-      )))
+      .settings(
+        inConfig(config)(
+          Seq(
+            scalastyleConfig := baseDirectory.value / "scalastyle-test-config.xml",
+            scalastyleFailOnError := false,
+            fork := requiresFork,
+            testFrameworks := Seq(ScalaTest),
+            testOptions += Argument(ScalaTest, "-oWDT"),
+            parallelExecution := requiresFork
+          )
+        )
+      )
       .enablePlugins(ScoverageSbtPlugin)
 
     protected def configureIt(requiresFork: Boolean): Project = project
       .configs(config)
       .settings(libraryDependencies ++= testDeps)
       .settings(inConfig(config)(Defaults.testSettings): _*)
-      .settings(inConfig(config)(scalafmtSettings))
-      .settings(inConfig(config)(Seq(
-        scalafmtOnCompile := true,
-        // scalastyleConfig := baseDirectory.value / "scalastyle-test-config.xml",
-        scalastyleFailOnError := false,
-        fork := requiresFork,
-        testFrameworks := Seq(ScalaTest),
-        testOptions += Argument(ScalaTest, "-oWDT", "-DtempFileName=tempFileName.txt"),
-        parallelExecution := false
-      )))
+      .settings(
+        inConfig(config)(
+          Seq(
+            scalastyleFailOnError := false,
+            fork := requiresFork,
+            testFrameworks := Seq(ScalaTest),
+            testOptions += Argument(ScalaTest, "-oWDT", "-DtempFileName=tempFileName.txt"),
+            parallelExecution := false
+          )
+        )
+      )
       .enablePlugins(ScoverageSbtPlugin)
 
   }

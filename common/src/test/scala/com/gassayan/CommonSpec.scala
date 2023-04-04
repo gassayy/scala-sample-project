@@ -1,12 +1,13 @@
 package com.gassayan
 
-import org.scalatest._
+import org.scalatest.flatspec.AnyFlatSpec
 import collection.mutable.ListBuffer
+import org.scalatest.BeforeAndAfter
 
-class CommonSpec extends FlatSpec with BeforeAndAfter {
+class CommonSpec extends AnyFlatSpec with BeforeAndAfter {
 
   val builder = new StringBuilder
-  val buffer = new ListBuffer[String]
+  val buffer  = new ListBuffer[String]
 
   before {
     builder.append("ScalaTest is ")

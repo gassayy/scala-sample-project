@@ -1,11 +1,10 @@
 addSbtPlugin("com.eed3si9n" % "sbt-assembly" % "0.14.8")
 addSbtPlugin("com.github.tkawachi" % "sbt-lock" % "0.5.0")
-addSbtPlugin("com.lucidchart" % "sbt-scalafmt" % "1.15")
 addSbtPlugin("io.spray" % "sbt-revolver" % "0.9.1")
-addSbtPlugin("org.wartremover" % "sbt-wartremover" % "2.3.7")
+addSbtPlugin("org.wartremover" % "sbt-wartremover" % "3.0.12")
 addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.5.1")
-addSbtPlugin("se.marcuslonnberg" % "sbt-docker"          % "1.5.0")
+addSbtPlugin("se.marcuslonnberg" % "sbt-docker" % "1.5.0")
 
 // Can't reslove from sbt
 addSbtPlugin("com.typesafe.sbt"  % "sbt-native-packager" % "1.3.15")

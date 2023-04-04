@@ -1,14 +1,17 @@
 package com.gassayan
 
-import org.scalatest._
+import org.scalatest.flatspec
 import java.io._
+import org.scalatest.BeforeAndAfterAllConfigMap
+import org.scalatest.Outcome
+import org.scalatest.ConfigMap
 
-trait TempFileExistsSpec extends fixture.FlatSpecLike with BeforeAndAfterAllConfigMap {
+trait TempFileExistsSpec extends flatspec.FixtureAnyFlatSpec with BeforeAndAfterAllConfigMap {
 
   type FixtureParam = File
   override def withFixture(test: OneArgTest): Outcome = {
     val fileName = test.configMap("tempFileName").asInstanceOf[String]
-    val file = new File(fileName)
+    val file     = new File(fileName)
     withFixture(test.toNoArgTest(file))
   }
 
@@ -39,8 +42,8 @@ trait TempFileExistsSpec extends fixture.FlatSpecLike with BeforeAndAfterAllConf
     // No need to require that configMap contains the key again because it won't get
     // here if it didn't contain the key in beforeAll
     val fileName = configMap("tempFileName").asInstanceOf[String]
-    val file = new File(fileName)
-    val _ = file.delete()
+    val file     = new File(fileName)
+    val _        = file.delete()
   }
 }
 
@@ -48,15 +51,3 @@ class OneSpec extends TempFileExistsSpec
 class TwoSpec extends TempFileExistsSpec
 class RedSpec extends TempFileExistsSpec
 class BlueSpec extends TempFileExistsSpec
-
-//class ExampleSpec extends Suites(
-//  new OneSpec,
-//  new TwoSpec,
-//  new RedSpec,
-//  new BlueSpec
-//) with TempFileExistsSpec with BeforeAndAfterAllConfigMap {
-//
-//
-//
-//
-//}
