@@ -21,7 +21,7 @@ lazy val root = project.root
   .setDescription("the root of multi-projects")
   .configureRoot
   .settings(noPublishSettings)
-  .aggregate(common, subproject1)
+  .aggregate(common)
 
 lazy val common = project
   .from("common")
@@ -50,7 +50,7 @@ lazy val subproject1 = project
   .configureModule
   .configureTests()
   .compileAndTestDependsOn(common)
-  .configureRun("com.gassayan.first.First")
+  .configureRun("com.gassayan.first.Main")
   .settings(
     Docker / version := buildVersion,
     dockerBaseImage := "openjdk:8-jre",
@@ -67,7 +67,7 @@ lazy val subproject2 = project
   .configureModule
   .configureTests()
   .compileAndTestDependsOn(common)
-  .configureRun("com.gassayan.second.Second")
+  .configureRun("com.gassayan.second.Main")
   .settings(
     Docker / version := buildVersion,
     dockerBaseImage := "openjdk:8-jre",
@@ -76,15 +76,27 @@ lazy val subproject2 = project
   )
   .enablePlugins(JavaAppPackaging, sbtdocker.DockerPlugin)
 
+lazy val sparkDemo = project
+  .from("spark-demo")
+  .setName("SparkDemo")
+  .setDescription("spark demo")
+  .setInitialImport("com.gassayan.spark._")
+  .configureModule
+  .configureTests()
+  .compileAndTestDependsOn(common)
+  .configureRun("com.gassayan.spark.Main")
+  .settings(libraryDependencies ++= sparkBundle ++ hudi)
+
 lazy val flinkDemo = project
   .from("flink-demo")
-  .setName("flink demo")
+  .setName("FlinkDemo")
   .setDescription("flink demo")
   .setInitialImport("com.gassayan.flink._")
   .configureModule
   .configureTests()
   .compileAndTestDependsOn(common)
   .configureRun("com.gassayan.flink.Main")
+  .settings(libraryDependencies ++= flink)
 
 addCommandAlias("fullTest", ";test;fun:test;it:test;scalastyle")
 

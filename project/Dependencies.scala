@@ -9,13 +9,13 @@ object Dependencies {
   val scalaOrganization = "org.scala-lang"
 
   val jdkV          = "1.8"
-  val scalaVersion  = "2.13.10"
+  val scalaVersion  = "2.12.17"
   val awsV          = "1.11.372"
   val akkaV         = "2.8.0"
   val catsV         = "2.9.0"
   val circeV        = "0.14.5"
   val shapelessV    = "2.3.10"
-  val akkaMgtV      = "1.20.0"
+  val akkaMgtV      = "1.3.0"
   val sparkV        = "3.2.3"
   val hudiV         = "0.13.0"
   val deltaV        = "2.2.0"
@@ -24,7 +24,7 @@ object Dependencies {
   val logbackV      = "1.4.6"
   val scalaTestV    = "3.2.15"
   val scalaCheckV   = "1.17.0"
-  val flinkV        = "1.7.0"
+  val flinkV        = "1.17.0"
 
   // build tools version
   val scalaFmtV = "3.7.2"
@@ -70,7 +70,7 @@ object Dependencies {
 
   // apache hudi
   val hudi = Seq(
-    "org.apache.hudi" %% "hudi-spark-bundle" % hudiV
+    "org.apache.hudi" %% "hudi-spark-bundle" % hudiV excludeAll ExclusionRule("org.scala-lang")
   )
   // delta.io
   val deltaIO = Seq(
@@ -80,7 +80,7 @@ object Dependencies {
   val pureConfig = "com.github.pureconfig" %% "pureconfig" % "0.17.2"
   // logging
   val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingV
-  val logback      = "ch.qos.logback" % "logback-classic" % logbackV
+  val logback      = "ch.qos.logback" % "logback-classic" % logbackV % Test
   val log4j = Seq(
     "org.apache.logging.log4j" % "log4j-api" % log4jV,
     "org.apache.logging.log4j" % "log4j-core" % log4jV,
@@ -90,7 +90,7 @@ object Dependencies {
   val flink = Seq(
     "org.apache.flink" %% "flink-clients" % flinkV,
     "org.apache.flink" %% "flink-scala" % flinkV,
-    "org.apache.flink" %% "flink-streaming-scala",
+    "org.apache.flink" %% "flink-streaming-scala" % flinkV,
     "org.apache.flink" %% "flink-connector-kafka" % flinkV
   )
   // testing
@@ -106,6 +106,7 @@ trait Dependencies {
   val scalaFmtVersionUsed   = scalaFmtV
   // resolvers
   val commonResolvers = resolvers
-  val mainDeps        = Seq(pureConfig, scalaLogging, logback) ++ akka ++ fpLibs ++ log4j
-  val testDeps        = Seq(scalaTest, scalaCheck, scalactic, akkaTest)
+  val mainDeps =
+    Seq(pureConfig, scalaLogging, logback) ++ akka ++ fpLibs ++ log4j
+  val testDeps = Seq(scalaTest, scalaCheck, scalactic, akkaTest)
 }
